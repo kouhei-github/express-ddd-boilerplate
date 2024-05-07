@@ -16,10 +16,10 @@ exports.up = function(db) {
     email: { type: 'string', notNull: true },
     password: { type: 'string', notNull: true },
     salt: { type: 'string', notNull: true },
-    sessionToken: { type: 'string', notNull: true },
+    sessionToken: { type: 'string' },
     userName: { type: 'string'},
-    createdAt: { type: 'datetime', notNull: true },
-    updatedAt: { type: 'datetime', notNull: true },
+    createdAt: { type: 'timestamp', notNull: true },
+    updatedAt: { type: 'timestamp', notNull: true },
   });
 };
 
