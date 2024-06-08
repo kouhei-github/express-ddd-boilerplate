@@ -3,6 +3,6 @@ WORKDIR /app
 COPY ./express /app
 COPY ./express/package.json /app
 COPY ./express/yarn.lock /app
-RUN yarn install
+RUN npm run install
 EXPOSE 8000
-CMD [ "yarn", "start" ]
+CMD [ "npm", "run", "start" ]

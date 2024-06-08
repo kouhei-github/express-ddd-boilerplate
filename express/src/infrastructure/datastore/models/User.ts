@@ -1,14 +1,5 @@
 import { Table, Column, DataType,Model} from 'sequelize-typescript';
 
-export interface UserI {
-  id: number
-  email: string
-  password: string
-  salt: string
-  userName: string
-  sessionToken: string
-}
-
 @Table({
   timestamps: true ,
   tableName: "users",
@@ -46,10 +37,4 @@ export class User extends Model {
     allowNull: true
   })
   sessionToken!: string
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true
-  })
-  userName!: string
 }

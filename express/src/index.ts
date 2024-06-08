@@ -6,7 +6,7 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import {injection} from './di'
-import {databaseReflect} from './db'
+import {databaseReflect} from './infrastructure/datastore/db'
 
 // データベースに接続
 databaseReflect()

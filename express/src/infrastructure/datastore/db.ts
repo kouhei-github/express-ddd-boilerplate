@@ -10,8 +10,7 @@ export const databaseReflect = () => {
     password: process.env.USER_PASS,
     dialect: 'mysql', // or 'mysql' for MySQL
     //Specify the path to your models
-    // Add each model to the sequelize instance
+    // Add each models to the sequelize instance
     models: [__dirname + '/models'],
   });
 }
-
