@@ -15,8 +15,9 @@ export class WebHooks implements IWebHooks {
 
   register(): Router
   {
+    router.post("/v1/login", (req, res) => this.userController.login(req, res))
     router.get("/v1/users", (req, res) => this.userController.getUsers(req, res))
-    router.post("/v1/users", (req, res) => this.userController.saveUser(req, res))
+    router.post("/v1/signup", (req, res) => this.userController.signup(req, res))
     return router
   }
 

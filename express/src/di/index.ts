@@ -5,9 +5,9 @@ import {AllUserUseCase} from "../application/useCase/userUseCase/allUser";
 import {UserController} from "../presentation/api/server/controller/userController";
 import {IWebHooks, WebHooks} from "../presentation/api/server/router";
 import {ServerMiddleware} from "../presentation/api/server/middleware";
+import {LoginUseCase} from "../application/useCase/authUseCase/loginUseCase";
 
 export const injection = (): IWebHooks => {
-
 
   const userRepository = UserRepository.builder()
 
@@ -18,7 +18,10 @@ export const injection = (): IWebHooks => {
   const signUpUseCase = SignUpUseCase.builder(userRepository, securityExternal)
 
   const allUserUseCase = AllUserUseCase.builder(userRepository)
-  const userHandler = UserController.builder(signUpUseCase, allUserUseCase)
+
+  const loginUseCase = LoginUseCase.builder(userRepository, securityExternal)
+
+  const userHandler = UserController.builder(signUpUseCase, allUserUseCase, loginUseCase)
   // ここでルーティングの設定
   return WebHooks.builder( userHandler )
 }

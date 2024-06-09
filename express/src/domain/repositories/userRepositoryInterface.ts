@@ -5,4 +5,5 @@ export interface IUserRepository {
     findUserByEmail(email: string): Promise<UserDto | null>
     findAllUser(): Promise<UserDto[]>
     findBySessionToken(token: string): Promise<UserDto|null>
+    update(data: UserDto): Promise<void>
 }

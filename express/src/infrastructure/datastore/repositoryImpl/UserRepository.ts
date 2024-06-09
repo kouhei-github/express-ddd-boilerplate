@@ -11,7 +11,10 @@ export class UserRepository implements IUserRepository {
 
   async findUserByEmail(email: string): Promise<UserDto | null>
   {
-    return await User.findOne({ where: { email: email }, attributes: { exclude: ['password', 'salt', 'sessionToken'] }})
+    // await User.findOne({ where: { email: email }, attributes: { exclude: ['password', 'salt', 'sessionToken'] }})
+    const user = await User.findOne({ where: { email: email }});
+
+    return user ? user.toJSON() : null;
   }
 
   async findAllUser(): Promise<UserDto[]>
@@ -22,6 +25,11 @@ export class UserRepository implements IUserRepository {
   async findBySessionToken(token: string): Promise<UserDto|null>
   {
     return await User.findOne({ where: { sessionToken: token }, attributes: { exclude: ['password', 'salt', 'sessionToken'] }})
+  }
+
+  async update(data: UserDto): Promise<void>
+  {
+    await User.update(data, { where: { id: data.id } })
   }
 
   static builder(): IUserRepository

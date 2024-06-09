@@ -2,14 +2,18 @@
 GET http://localhost:8000/api/v1/users
 Content-Type: application/json
 
+### POST request to 登録
+POST http://localhost:8000/api/v1/signup
+Content-Type: application/json
+
 {
   "email": "test@test.com",
-  "password": "test"
+  "password": "testj3%Ytv"
 }
 
 
-### POST request to 登録
-POST http://localhost:8000/api/v1/users
+### POST request to ログイン
+POST http://localhost:8000/api/v1/login
 Content-Type: application/json
 
 {

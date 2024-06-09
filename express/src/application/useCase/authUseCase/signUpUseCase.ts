@@ -6,9 +6,26 @@ import {Email} from "../../../domain/models/userModel/email";
 
 export class SignUpUseCase
 {
+    /**
+     * Class constructor for creating an instance of MyClass.
+     *
+     * @param {IUserRepository} ur - An instance of IUserRepository.
+     * @param {ISecurityService} se - An instance of ISecurityService.
+     */
     constructor(private ur: IUserRepository, private se: ISecurityService) {
     }
 
+    /**
+     * Executes the registration process for a user.
+     *
+     * @param {string} email - The email address of the user.
+     * @param {string} password - The password of the user.
+     *
+     * @return {Promise<IResponse>} The response object containing the result of the execution.
+     * @property {string} data - The data returned from the execution.
+     * @property {number} status - The status code of the execution.
+     * @property {string} message - The message describing the result of the execution.
+     */
     public async execute(
         email: string,
         password: string
