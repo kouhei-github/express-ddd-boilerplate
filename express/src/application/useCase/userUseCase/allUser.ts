@@ -1,4 +1,4 @@
-import {IUserRepository} from "../../../domain/repositories/userRepositoryInterface";
+import {IUserRepository} from "../../../domain/interface/repositories/userRepositoryInterface";
 import {IResponse} from "../index";
 
 export class AllUserUseCase

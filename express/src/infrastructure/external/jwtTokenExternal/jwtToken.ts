@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 import process from 'process'
-import {ISecurityService} from "../../../application/useCase/external/jwtTokenExternal";
+import {ISecurityService} from "../../../domain/interface/externals/jwtTokenExternal";
 
 
 export class SecurityExternal implements ISecurityService {

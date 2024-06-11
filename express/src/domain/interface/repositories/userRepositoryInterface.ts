@@ -1,4 +1,4 @@
-import {UserDto} from "../../infrastructure/datastore/dto/user";
+import {UserDto} from "../../../infrastructure/datastore/dto/user";
 
 export interface IUserRepository {
     createUser(data: Pick<UserDto, "email"|"password"|"salt">): Promise<UserDto>

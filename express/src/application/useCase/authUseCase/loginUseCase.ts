@@ -1,8 +1,8 @@
 import {IResponse} from "../index";
-import {ISecurityService} from "../external/jwtTokenExternal";
+import {ISecurityService} from "../../../domain/interface/externals/jwtTokenExternal";
 import {Email} from "../../../domain/models/userModel/email";
 import {Password} from "../../../domain/models/userModel/password";
-import {IUserRepository} from "../../../domain/repositories/userRepositoryInterface";
+import {IUserRepository} from "../../../domain/interface/repositories/userRepositoryInterface";
 
 export class LoginUseCase
 {

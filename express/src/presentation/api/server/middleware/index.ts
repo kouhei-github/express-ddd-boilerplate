@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express'
 import {get, merge} from 'lodash'
 import {UserDto} from "../../../../infrastructure/datastore/dto/user";
-import {IUserRepository} from "../../../../domain/repositories/userRepositoryInterface";
+import {IUserRepository} from "../../../../domain/interface/repositories/userRepositoryInterface";
 
 interface IServerMiddleware {
   isOwnerHandler(req: Request, res: Response, next: NextFunction):  Promise<void | Response<any, Record<string, any>>>

@@ -1,6 +1,6 @@
-import {IUserRepository} from "../../../domain/repositories/userRepositoryInterface";
+import {IUserRepository} from "../../../domain/interface/repositories/userRepositoryInterface";
 import {IResponse} from "../index";
-import {ISecurityService} from "../external/jwtTokenExternal";
+import {ISecurityService} from "../../../domain/interface/externals/jwtTokenExternal";
 import {Password} from "../../../domain/models/userModel/password";
 import {Email} from "../../../domain/models/userModel/email";
 
