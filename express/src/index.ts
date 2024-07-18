@@ -27,6 +27,6 @@ app.use("/api/", router.register())
 
 const server = http.createServer(app)
 
-server.listen(8000, () => {
+server.listen(8080, () => {
   console.log("Server running!")
 })

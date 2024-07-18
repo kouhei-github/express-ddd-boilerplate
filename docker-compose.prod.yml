@@ -29,16 +29,16 @@ services:
       - ${PORT}
 
   express:
-    image: express-ddd-image
-    container_name: express-ddd-container
+    image: express-ddd-prod-image
+    container_name: express-ddd-prod-container
     build:
       context: .
-      dockerfile: ./container/nodejs/Dockerfile
-    volumes:
-      - ./express:/app
+      dockerfile: ./container/nodejs/Dockerfile.Prod
+#    volumes:
+#      - ./express:/app
     ports:
       - "8080:8080"
-    command: yarn start
+#    command: yarn start
     tty: true
 
     environment:
