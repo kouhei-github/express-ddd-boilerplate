@@ -82,3 +82,4 @@ fabric.properties
 express/.env
 express/node_modules
 .vscode
+.idea
