@@ -1,0 +1,25 @@
+### POST request to signup
+POST http://0.0.0.0:8080/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "testj3%Ytv"
+}
+
+### POST request to ログイン
+POST http://0.0.0.0:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "testj3%Ytv"
+}
+### POST request to refresh
+POST http://0.0.0.0:8080/api/v1/auth/refresh
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzczMSwiZXhwIjoxNzIzOTM3MzMxfQ.Qs7Q5OCSQXmojZCba4uQ0YvFtgOUiRbOxUyomcSkAlQ
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzczMSwiZXhwIjoxNzI0NTM4NTMxfQ._jOp0FescQenVnPPQUpwpJI3VFTU_VhUoOJMidwWm-w"
+}

@@ -1,11 +1,26 @@
-type UserDto = {
-    id: number
-    email: string
-    password: string
-    salt: string
-    sessionToken: string
-}
+import { z } from 'zod'
 
-export {
-    UserDto
-}
+const userAuthSchema = z.object({
+  id: z.number(),
+  passwordHash: z.string(),
+  passwordSalt: z.string(),
+})
+
+const showUserDaoSchema = z.object({
+  id: z.number(),
+  userAuthId: z.number(),
+  name: z.string().nullable(),
+  email: z.string().email(),
+  loginType: z.string().nullable(),
+  profilePicture: z.string().nullable(),
+  language: z.string().nullable(),
+  timezone: z.string().nullable(),
+  status: z.string().nullable(),
+  userAuth: userAuthSchema,
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})
+
+type ShowUserDao = z.infer<typeof showUserDaoSchema>
+
+export { ShowUserDao, showUserDaoSchema }

@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int               @id @default(autoincrement())
+  userAuthId       Int               @unique
+  name             String?
+  email            String            @unique
+  loginType        String?
+  profilePicture   String?
+  language         String?
+  timezone         String?
+  status           String?
+  createdAt        DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime          @default(now()) @db.Timestamptz(6)
+  Message          Message[]
+  tasksCreated     Task[]            @relation("TaskCreator")
+  taskUsers        TaskUser[]
+  userAuth         UserAuth          @relation(fields: [userAuthId], references: [id])
+  workspaceMembers WorkspaceMember[]
+}
+
+model UserAuth {
+  id           Int    @id @default(autoincrement())
+  passwordHash String
+  passwordSalt String
+  user         User?
+}
+
+model Workspace {
+  id               Int               @id @default(autoincrement())
+  name             String
+  workspacePicture String?
+  plan             String?
+  planStartDate    DateTime?
+  planEndDate      DateTime?
+  maxMembers       Int?
+  type             String?
+  createdAt        DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime          @default(now()) @db.Timestamptz(6)
+  messages         Message[]
+  // tasks            Task[]
+  members          WorkspaceMember[]
+}
+
+model WorkspaceMember {
+  id          Int       @id @default(autoincrement())
+  workspaceId Int
+  userId      Int
+  role        String?
+  status      String?
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @db.Timestamptz(6)
+  user        User      @relation(fields: [userId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+model Task {
+  id            Int        @id @default(autoincrement())
+  title         String
+  text          String
+  status        Int
+  creatorUserId Int
+  isBookMark    Int
+  isDeleted     Boolean
+  taskDeadline  BigInt
+  url           String?
+  deadline      DateTime
+  createdAt     DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime   @default(now()) @db.Timestamptz(6)
+  creatorUser   User       @relation("TaskCreator", fields: [creatorUserId], references: [id])
+  users         TaskUser[]
+
+  // @@index([workspaceId])
+  @@index([creatorUserId])
+}
+
+model TaskUser {
+  taskId Int
+  userId Int
+  task   Task @relation(fields: [taskId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
+
+  @@id([taskId, userId])
+  @@index([taskId])
+  @@index([userId])
+}
+
+model Message {
+  id                Int       @id @default(autoincrement())
+  userId            Int
+  workspaceId       Int
+  content           String
+  readStatus        String?
+  chatIntegrationId String?
+  chatMessageId     String?
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  user              User      @relation(fields: [userId], references: [id])
+  workspace         Workspace @relation(fields: [workspaceId], references: [id])
+
+  @@index([userId])
+  @@index([workspaceId])
+}

@@ -1,32 +1,35 @@
-import 'reflect-metadata'
-import express from "express"
-import cors from "cors"
-import * as http from 'http'
+import bodyParser from 'body-parser'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
-import bodyParser from 'body-parser'
-import {injection} from './di'
-import {databaseReflect} from './infrastructure/datastore/db'
-
-// データベースに接続
-databaseReflect()
+import cors from 'cors'
+import express from 'express'
+import * as http from 'http'
+import 'reflect-metadata'
+import { injection } from './di'
+import { setPrismaClient } from './infrastructure/datastore/db'
 
 const app = express()
-app.use(cors({
-  credentials: true
-}))
+app.use(
+  cors({
+    credentials: true,
+  }),
+)
 
 app.use(compression())
 app.use(cookieParser())
 app.use(bodyParser.json())
 
-// Dependency Injection
-const router = injection()
+// データベースに接続
+const db = setPrismaClient()
 
-app.use("/api/", router.register())
+// Dependency Injection
+const router = injection(db)
+
+// ルーティングの設定
+app.use('/api', router.register())
 
 const server = http.createServer(app)
 
 server.listen(8080, () => {
-  console.log("Server running!")
+  console.log('Server running!')
 })

@@ -1,34 +1,64 @@
 {
   "scripts": {
-    "start": "nodemon",
+    "start": "npx prisma generate && npm run migrate-seed && nodemon",
     "build": "tsc",
     "serve": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate-seed": "npm run migrate",
+    "migrate": "prisma migrate deploy",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "run-s lint:*",
+    "lint:eslint": "next lint",
+    "lint:prettier": "prettier --check . --ignore-path .prettierignore",
+    "lint:tsc": "tsc --build",
+    "format": "prettier --write \"*src/**/*.{js,ts,jsx,tsx}\""
   },
   "dependencies": {
+    "@prisma/client": "^5.18.0",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.11.25",
+    "@types/node": "^22.4.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "db-migrate": "^0.11.14",
-    "db-migrate-mysql": "^2.3.2",
+    "db-migrate-mysql": "^3.0.0",
     "dotenv": "^16.4.5",
-    "express": "^4.18.3",
-    "mysql2": "^3.9.2",
-    "nodemon": "^3.1.0",
-    "reflect-metadata": "^0.2.1",
-    "sequelize": "^6.37.1",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.0",
+    "nodemon": "^3.1.4",
+    "reflect-metadata": "^0.2.2",
+    "sequelize": "^6.37.3",
     "sequelize-typescript": "^2.1.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.5.4",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.5",
-    "lodash": "^4.17.21"
+    "@quramy/prisma-fabbrica": "^2.2.1",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/lodash": "^4.17.7",
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
+    "eslint": "^8.30.0",
+    "eslint-config-next": "^13.1.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "lodash": "^4.17.21",
+    "npm-check-updates": "^17.0.6",
+    "prettier": "^3.0.3",
+    "prettier-plugin-organize-imports": "^3.2.3",
+    "prisma": "^5.18.0"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true,
+    "semi": false,
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ]
   }
 }

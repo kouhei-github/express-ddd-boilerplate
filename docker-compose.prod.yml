@@ -2,7 +2,7 @@ version: '3.9'
 services:
   db:
     image: mysql:8
-    container_name: express-ddd-database # phpMyAdminサービスのPMA_HOSTSに設定する
+    container_name: zenmetry-database # phpMyAdminサービスのPMA_HOSTSに設定する
     environment:
       MYSQL_ROOT_PASSWORD: ${ROOT_PASS}
       MYSQL_DATABASE: ${DATABASE}
@@ -29,8 +29,8 @@ services:
       - ${PORT}
 
   express:
-    image: express-ddd-prod-image
-    container_name: express-ddd-prod-container
+    image: zenmetry-api-prod-image
+    container_name: zenmetry-api-prod-container
     build:
       context: .
       dockerfile: ./container/nodejs/Dockerfile.Prod

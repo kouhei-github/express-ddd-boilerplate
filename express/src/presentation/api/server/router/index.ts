@@ -1,5 +1,12 @@
 import { Router } from 'express'
-import {IUserController} from "./implument";
+import { IJwtMiddleware } from '../middleware/jwtMiddleware'
+import {
+  IAuthController,
+  IHealthCheckController,
+  ITaskController,
+  IUserController,
+  IWorkSpaceController,
+} from './implument'
 
 const router = Router()
 
@@ -9,23 +16,70 @@ export interface IWebHooks {
 
 export class WebHooks implements IWebHooks {
   constructor(
-      private userController: IUserController
-  ) {
-  }
+    private readonly jwtMiddleware: IJwtMiddleware,
+    private readonly health: IHealthCheckController,
+    private readonly user: IUserController,
+    private readonly auth: IAuthController,
+    private readonly task: ITaskController,
+    private readonly workspace: IWorkSpaceController,
+  ) {}
 
-  register(): Router
-  {
-    router.post("/v1/login", (req, res) => this.userController.login(req, res))
-    router.get("/v1/users", (req, res) => this.userController.getUsers(req, res))
-    router.post("/v1/signup", (req, res) => this.userController.signup(req, res))
+  register(): Router {
+    // 認証の必要無いルーティング
+    const publicRouter = Router()
+    this.setupPublicRoutes(publicRouter)
+    router.use('/v1', publicRouter)
+
+    // 認証関連のルーティング
+    const authRouter = Router()
+    this.setupAuthRoutes(authRouter)
+    router.use('/v1/auth', authRouter)
+
+    // 一般ユーザー向けのルーティング
+    const userRouter = Router()
+    userRouter.use((req, res, next) => this.jwtMiddleware.jwtCheck(req, res, next)) // 共通ミドルウェアを適用
+    this.setupNormalUserRoutes(userRouter)
+    router.use('/v1', userRouter)
+
+    // 管理者用のルーティング
+    const adminRouter = Router()
+    adminRouter.use((req, res, next) => this.jwtMiddleware.jwtCheck(req, res, next)) // 共通ミドルウェアを適用
+    this.setupAdminRoutes(adminRouter)
+    router.use('/v1/admin', adminRouter)
+
     return router
   }
 
+  private setupPublicRoutes(publicRouter: Router): void {
+    publicRouter.get('/health', (req, res) => this.health.healthCheck(req, res))
+  }
+
+  private setupAuthRoutes(publicRouter: Router): void {
+    publicRouter.post('/login', (req, res) => this.auth.login(req, res))
+    publicRouter.post('/signup', (req, res) => this.auth.signup(req, res))
+    publicRouter.post('/refresh', (req, res) => this.auth.refresh(req, res))
+  }
+
+  private setupNormalUserRoutes(userRouter: Router): void {
+    userRouter.get('/tasks', (req, res) => this.task.list(req, res))
+    userRouter.post('/tasks', (req, res) => this.task.create(req, res))
+    userRouter.get('/tasks/:id', (req, res) => this.task.getTask(req, res))
+    userRouter.patch('/tasks/:id', (req, res) => this.task.update(req, res))
+  }
+
+  private setupAdminRoutes(adminRouter: Router): void {
+    adminRouter.post('/workspace', (req, res) => this.workspace.create(req, res))
+    adminRouter.get('/users', (req, res) => this.user.getUsers(req, res))
+  }
 
   static builder(
-      userController: IUserController
-  ): IWebHooks
-  {
-    return new this(userController);
+    jwtMiddleware: IJwtMiddleware,
+    health: IHealthCheckController,
+    user: IUserController,
+    auth: IAuthController,
+    task: ITaskController,
+    workspace: IWorkSpaceController,
+  ): IWebHooks {
+    return new this(jwtMiddleware, health, user, auth, task, workspace)
   }
 }

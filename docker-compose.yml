@@ -1,36 +1,27 @@
 version: '3.9'
 services:
   db:
-    image: mysql:8
-    container_name: express-ddd-database # phpMyAdminサービスのPMA_HOSTSに設定する
+    image: postgres:latest
+    volumes:
+      - ./container/db/postgres_data:/var/lib/postgresql/data
     environment:
-      MYSQL_ROOT_PASSWORD: ${ROOT_PASS}
-      MYSQL_DATABASE: ${DATABASE}
-      MYSQL_USER: ${USERNAME}
-      MYSQL_PASSWORD: ${USER_PASS}
-      TZ: 'Asia/Tokyo'
-      LC_ALL: 'ja_JP.UTF-8'
-      LANG: "ja_JP.UTF-8"
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      POSTGRES_PASSWORD: ${USER_PASS}
+      POSTGRES_DB: ${DATABASE}
+      POSTGRES_USER: ${USERNAME}
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping"]
+      test: ["CMD-SHELL", "pg_isready -U ${USERNAME} -d ${DATABASE}"]
       interval: 10s
-      timeout: 10s
-      retries: 3
+      timeout: 5s
+      retries: 5
       start_period: 30s
     env_file:
       - .env
-    volumes:
-      - ./container/db/data:/var/lib/mysql
-      - ./container/db/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
-      - ${PORT}:3306
-    expose:
-      - ${PORT}
+      - "5432:5432"
 
   express:
-    image: express-ddd-image
-    container_name: express-ddd-container
+    image: zenmetry-api-image
+    container_name: zenmetry-api-container
     build:
       context: .
       dockerfile: ./container/nodejs/Dockerfile

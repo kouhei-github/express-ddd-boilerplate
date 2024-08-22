@@ -1,0 +1,43 @@
+### GET request to task list
+GET http://0.0.0.0:8080/api/v1/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzgwNCwiZXhwIjoxNzIzOTM3NDA0fQ.GJyhyVHxdfClOL75Ob1ZMZR5RSDkuHxG51oiePqyAEQ
+
+
+### POST Taskの登録
+POST http://0.0.0.0:8080/api/v1/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzgwNCwiZXhwIjoxNzIzOTM3NDA0fQ.GJyhyVHxdfClOL75Ob1ZMZR5RSDkuHxG51oiePqyAEQ
+
+{
+  "deadline": "2024-08-15T17:00",
+  "isBookMark": 0,
+  "isDeleted": false,
+  "status": 0,
+  "taskDeadline": 1723708800000,
+  "text": "テスト",
+  "title": "テスト",
+  "url": "https://sample.co.jp/"
+}
+
+### PATCH Taskの更新
+PATCH http://0.0.0.0:8080/api/v1/tasks/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzgwNCwiZXhwIjoxNzIzOTM3NDA0fQ.GJyhyVHxdfClOL75Ob1ZMZR5RSDkuHxG51oiePqyAEQ
+
+{
+  "deadline": "2024-08-15T17:00",
+  "isBookMark": 0,
+  "isDeleted": true,
+  "status": 0,
+  "taskDeadline": 1723708800000,
+  "text": "テスト3",
+  "title": "テスト2",
+  "url": "https://sample.co.jp/"
+}
+
+
+### GET Taskの取得
+GET http://0.0.0.0:8080/api/v1/tasks/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzgwNCwiZXhwIjoxNzIzOTM3NDA0fQ.GJyhyVHxdfClOL75Ob1ZMZR5RSDkuHxG51oiePqyAEQ

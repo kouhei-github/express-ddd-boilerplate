@@ -1,112 +1,46 @@
-## 参考にした記事
-[https://thriveread.com/sequelize-with-typescript-and-nodejs-example/](https://thriveread.com/sequelize-with-typescript-and-nodejs-example/)
+# Express
 
-### GitHub
-[https://github.com/kimkimani/Sequelize-with-Typescript](https://github.com/kimkimani/Sequelize-with-Typescript)
+---
 
-## DBのマイグレーション
-### 1. マイグレーションファイルの作成
+## 1. Setup
 ```shell
-make migrate_create name=create_table_user
+sh generate-envfile.sh
 ```
 
-#### LLMにマイグレーションファイルを書かせる
-```javascript
-'use strict';
-
-var dbm;
-var type;
-var seed;
-
-/**
-  * We receive the dbmigrate dependency from dbmigrate initially.
-  * This enables us to not have to rely on NODE_PATH.
-  */
-exports.setup = function(options, seedLink) {
-  dbm = options.dbmigrate;
-  type = dbm.dataType;
-  seed = seedLink;
-};
-
-exports.up = function(db) {
-  return null;
-};
-
-exports.down = function(db) {
-  return null;
-};
-
-exports._meta = {
-  "version": 1
-};
-```
-
-下記モデルに合わせて、マイグレーションファイルを作成してください。
-
-```typescript
-import { Table, Column, DataType,Model} from 'sequelize-typescript';
-
-export interface UserI {
-  id: number
-  email: string
-  password: string
-  salt: string
-  userName: string
-  sessionToken: string
-}
-
-@Table({
-  timestamps: true ,
-  tableName: "users",
-  modelName: "User"
-})
-
-export class User extends Model {
-  @Column({
-    type: DataType.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  })
-  declare id: number
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  email!: string
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  password!: string
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false
-  })
-  salt!: string
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true
-  })
-  sessionToken!: string
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true
-  })
-  userName!: string
-}
-```
-
-## 2. マイグレーションファイルの適用
+### 1.1 POSTGRESへ接続
 ```shell
-make migrate_up
+psql -h localhost -p 5432 -U user -d zenmetry
 ```
 
-## 3. マイグレーションファイルのロールバック
+## 2. Versionの更新
+### 2.1. 更新Versionの確認
 ```shell
-make migrate_down
+npx npm-check-updates
+```
+
+### 2.2. 更新
+```shell
+npx npm-check-updates -u
+```
+
+### 2.3. 更新後にInstall
+```shell
+npm install
+```
+
+## 3. Prismaの使用方法
+### 3.1. schema.prismaからSQLファイルの作成
+```shell
+# npx prisma migrate dev --name create_user_auth_table
+npx prisma migrate dev --name ファイル名
+```
+
+### 3.2 schema.prismaからモデルの作成
+```shell
+npx prisma generate
+```
+
+### 3.2.DBに反映させたい時
+```shell
+npm run migrate-seed
 ```

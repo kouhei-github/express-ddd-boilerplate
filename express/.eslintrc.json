@@ -1,0 +1,36 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended", // TypeScriptの推奨ルールを追加
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser", // TypeScript用のパーサーを指定
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+        "tabWidth": 2,
+        "useTabs": false,
+        "jsxSingleQuote": true,
+        "bracketSpacing": true,
+        "singleQuote": true,
+        "semi": false,
+        "printWidth": 120,
+        "trailingComma": "all"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-unused-vars": "warn",
+    "no-console": "off"
+  }
+}
