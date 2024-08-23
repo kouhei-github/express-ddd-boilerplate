@@ -18,17 +18,17 @@ RUN apk add --no-cache make
 
 # Copy the built files and other necessary files from the build stage
 COPY --from=build /app/dist /app/dist
-COPY --from=build /app/migrations /app/migrations
+COPY --from=build /app/prisma /app/prisma
 COPY --from=build /app/node_modules /app/node_modules
-COPY --from=build /app/.env.sample /app/.env.sample
 COPY --from=build /app/database.json /app/database.json
 COPY --from=build /app/Makefile /app/Makefile
 COPY --from=build /app/nodemon.json /app/nodemon.json
 COPY --from=build /app/package.json /app/package.json
 COPY --from=build /app/package-lock.json /app/package-lock.json
 COPY --from=build /app/tsconfig.json /app/tsconfig.json
+COPY ./container/nodejs/start.sh /app/start.sh
 
 EXPOSE 8080
 
-CMD [ "node", "dist/index.js" ]
+CMD [ "sh", "start.sh" ]
 

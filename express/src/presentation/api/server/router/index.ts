@@ -1,12 +1,6 @@
 import { Router } from 'express'
 import { IJwtMiddleware } from '../middleware/jwtMiddleware'
-import {
-  IAuthController,
-  IHealthCheckController,
-  ITaskController,
-  IUserController,
-  IWorkSpaceController,
-} from './implument'
+import { IAuthController, IHealthCheckController, ITaskController, IWorkSpaceController } from './implument'
 
 const router = Router()
 
@@ -18,7 +12,6 @@ export class WebHooks implements IWebHooks {
   constructor(
     private readonly jwtMiddleware: IJwtMiddleware,
     private readonly health: IHealthCheckController,
-    private readonly user: IUserController,
     private readonly auth: IAuthController,
     private readonly task: ITaskController,
     private readonly workspace: IWorkSpaceController,
@@ -69,17 +62,15 @@ export class WebHooks implements IWebHooks {
 
   private setupAdminRoutes(adminRouter: Router): void {
     adminRouter.post('/workspace', (req, res) => this.workspace.create(req, res))
-    adminRouter.get('/users', (req, res) => this.user.getUsers(req, res))
   }
 
   static builder(
     jwtMiddleware: IJwtMiddleware,
     health: IHealthCheckController,
-    user: IUserController,
     auth: IAuthController,
     task: ITaskController,
     workspace: IWorkSpaceController,
   ): IWebHooks {
-    return new this(jwtMiddleware, health, user, auth, task, workspace)
+    return new this(jwtMiddleware, health, auth, task, workspace)
   }
 }

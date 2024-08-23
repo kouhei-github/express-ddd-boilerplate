@@ -20,8 +20,8 @@ services:
       - "5432:5432"
 
   express:
-    image: zenmetry-api-image
-    container_name: zenmetry-api-container
+    image: express-ddd-sample-image
+    container_name: express-ddd-sample-container
     build:
       context: .
       dockerfile: ./container/nodejs/Dockerfile
@@ -30,7 +30,7 @@ services:
       - /app/node_modules
     ports:
       - "8080:8080"
-    command: yarn start
+    command: npm run start
     tty: true
 
     environment:

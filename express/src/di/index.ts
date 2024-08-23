@@ -6,7 +6,6 @@ import { TaskCreateUseCase } from '../application/useCase/taskUseCase/taskCreate
 import { TaskGetUseCase } from '../application/useCase/taskUseCase/taskGetUseCase'
 import { TaskListUseCase } from '../application/useCase/taskUseCase/taskListUseCase'
 import { TaskPatchUseCase } from '../application/useCase/taskUseCase/taskPatchUseCase'
-import { AllUserUseCase } from '../application/useCase/userUseCase/allUser'
 import { WorkSpaceCreateUseCase } from '../application/useCase/workSpaceUseCase/workSpaceCreateUseCase'
 import { TaskRepository } from '../infrastructure/datastore/repositoryImpl/taskRepository'
 import { UserRepository } from '../infrastructure/datastore/repositoryImpl/userRepository'
@@ -17,7 +16,6 @@ import { SecurityExternal } from '../infrastructure/external/securityExternal/se
 import { AuthController } from '../presentation/api/server/controller/authController/authController'
 import { HealthCheckController } from '../presentation/api/server/controller/healthCheckController'
 import { TaskController } from '../presentation/api/server/controller/taskController/taskController'
-import { UserController } from '../presentation/api/server/controller/userController/userController'
 import { WorkSpaceController } from '../presentation/api/server/controller/workSpaceController/workSpaceController'
 import { JwtMiddleware } from '../presentation/api/server/middleware/jwtMiddleware'
 import { IWebHooks, WebHooks } from '../presentation/api/server/router'
@@ -38,9 +36,6 @@ export const injection = (db: PrismaClient): IWebHooks => {
   // ユーザー登録（サインアップ）に関するユースケースを初期化
   const signUpUseCase = SignUpUseCase.builder(userRepository, securityExternal)
 
-  // すべてのユーザーを取得するユースケースを初期化
-  const allUserUseCase = AllUserUseCase.builder(userRepository)
-
   // ユーザーのログインに関するユースケースを初期化（JWTトークンの発行を含む）
   const loginUseCase = LoginUseCase.builder(userRepository, securityExternal, jwtExternal)
 
@@ -56,9 +51,6 @@ export const injection = (db: PrismaClient): IWebHooks => {
   // JWTトークンをチェックするミドルウェア
   const jwtMiddleware = JwtMiddleware.builder(jwtExternal)
 
-  // ユーザーに関連するリクエストを処理するコントローラを初期化
-  const userHandler = UserController.builder(allUserUseCase)
-
   // タスクを作成する
   const taskRepository = TaskRepository.builder(db)
   const taskCreateUseCase = TaskCreateUseCase.builder(taskRepository)
@@ -72,5 +64,5 @@ export const injection = (db: PrismaClient): IWebHooks => {
   const workspaceCreateUseCase = WorkSpaceCreateUseCase.builder(workspaceRepository)
   const workspaceHandler = WorkSpaceController.builder(workspaceCreateUseCase)
   // ここでWebフックのルーティング設定を行い、IWebHooksインターフェースを返す
-  return WebHooks.builder(jwtMiddleware, healthCheckHandler, userHandler, authHandler, taskHandler, workspaceHandler)
+  return WebHooks.builder(jwtMiddleware, healthCheckHandler, authHandler, taskHandler, workspaceHandler)
 }
