@@ -1,15 +1,16 @@
 import { Request, Response } from 'express'
-import { LoginUseCase } from '../../../../../application/useCase/authUseCase/loginUseCase'
-import { RefreshTokenUseCase } from '../../../../../application/useCase/authUseCase/refreshTokenUseCase'
-import { SignUpUseCase } from '../../../../../application/useCase/authUseCase/signUpUseCase'
+import { ILoginUseCase, IRefreshTokenUseCase, ISignUpUseCase } from '../../../../../application/useCase/impluments/auth'
+import { IGetUserUseCase } from '../../../../../application/useCase/impluments/user'
+import { jwtClaimSchema } from '../../middleware/jwtPayload'
 import { IAuthController } from '../../router/implument'
 import { authSchema } from './schema'
 
 export class AuthController implements IAuthController {
   constructor(
-    private readonly signUpUseCase: SignUpUseCase,
-    private readonly loginUseCase: LoginUseCase,
-    private readonly refreshToken: RefreshTokenUseCase,
+    private readonly signUpUseCase: ISignUpUseCase,
+    private readonly loginUseCase: ILoginUseCase,
+    private readonly refreshToken: IRefreshTokenUseCase,
+    private readonly getUserUseCase: IGetUserUseCase,
   ) {}
 
   async signup(req: Request, res: Response): Promise<any> {
@@ -30,7 +31,6 @@ export class AuthController implements IAuthController {
       const { email, password } = authSchema.parse(req.body)
       const result = await this.loginUseCase.execute(email, password)
       if (result.status > 202) {
-        console.log(result)
         return res.status(result.status).json(result.message)
       }
       return res.json(result.data).status(result.status)
@@ -49,7 +49,22 @@ export class AuthController implements IAuthController {
     }
   }
 
-  static builder(signUpUseCase: SignUpUseCase, loginUseCase: LoginUseCase, refreshToken: RefreshTokenUseCase) {
-    return new this(signUpUseCase, loginUseCase, refreshToken)
+  async me(_: Request, res: Response): Promise<any> {
+    try {
+      const claim = jwtClaimSchema.parse(res.locals['user'])
+      const result = await this.getUserUseCase.execute(claim.userId)
+      return res.json(result.data).status(result.status)
+    } catch (e) {
+      return res.status(400).json({ data: `${JSON.stringify(e)}` })
+    }
+  }
+
+  static builder(
+    signUpUseCase: ISignUpUseCase,
+    loginUseCase: ILoginUseCase,
+    refreshToken: IRefreshTokenUseCase,
+    getUserUseCase: IGetUserUseCase,
+  ) {
+    return new this(signUpUseCase, loginUseCase, refreshToken, getUserUseCase)
   }
 }

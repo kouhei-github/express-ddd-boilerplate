@@ -1,18 +1,20 @@
 import { Request, Response } from 'express'
-import { TaskCreateUseCase } from '../../../../../application/useCase/taskUseCase/taskCreateUseCase'
-import { TaskGetUseCase } from '../../../../../application/useCase/taskUseCase/taskGetUseCase'
-import { TaskListUseCase } from '../../../../../application/useCase/taskUseCase/taskListUseCase'
-import { TaskPatchUseCase } from '../../../../../application/useCase/taskUseCase/taskPatchUseCase'
+import {
+  ITaskCreateUseCase,
+  ITaskGetUseCase,
+  ITaskListUseCase,
+  ITaskPatchUseCase,
+} from '../../../../../application/useCase/impluments/task'
 import { jwtClaimSchema } from '../../middleware/jwtPayload'
 import { ITaskController } from '../../router/implument'
 import { taskRequestSchema } from './schema'
 
 export class TaskController implements ITaskController {
   constructor(
-    private readonly taskCreate: TaskCreateUseCase,
-    private readonly taskGet: TaskGetUseCase,
-    private readonly taskPatch: TaskPatchUseCase,
-    private readonly taskList: TaskListUseCase,
+    private readonly taskCreate: ITaskCreateUseCase,
+    private readonly taskGet: ITaskGetUseCase,
+    private readonly taskPatch: ITaskPatchUseCase,
+    private readonly taskList: ITaskListUseCase,
   ) {}
   async create(req: Request, res: Response): Promise<any> {
     try {
@@ -72,10 +74,10 @@ export class TaskController implements ITaskController {
   }
 
   static builder(
-    taskCreate: TaskCreateUseCase,
-    taskGet: TaskGetUseCase,
-    taskPatch: TaskPatchUseCase,
-    taskList: TaskListUseCase,
+    taskCreate: ITaskCreateUseCase,
+    taskGet: ITaskGetUseCase,
+    taskPatch: ITaskPatchUseCase,
+    taskList: ITaskListUseCase,
   ): ITaskController {
     return new this(taskCreate, taskGet, taskPatch, taskList)
   }

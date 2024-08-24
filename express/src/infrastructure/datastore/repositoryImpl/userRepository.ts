@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { MeDao, meSchema, ShowUserDao, showUserDaoSchema } from '../../../domain/interface/repositories/dto/user'
 import { IUserRepository } from '../../../domain/interface/repositories/userRepository'
-import { ShowUserDao, showUserDaoSchema } from '../dto/user'
 
 export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -48,6 +48,17 @@ export class UserRepository implements IUserRepository {
         },
       })
     })
+  }
+
+  async findById(userId: number): Promise<MeDao | null> {
+    const user = await this.prisma.user.findFirst({
+      where: { id: userId },
+    })
+    if (!user) {
+      return null
+    }
+    const users = meSchema.parse(user)
+    return users
   }
 
   static builder(db: PrismaClient): IUserRepository {

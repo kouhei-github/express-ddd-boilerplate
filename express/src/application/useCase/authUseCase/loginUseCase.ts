@@ -1,10 +1,12 @@
+import { pick } from 'lodash'
 import { IJwtTokenExternal, ISecurityService } from '../../../domain/interface/externals/securityExternal'
 import { IUserRepository } from '../../../domain/interface/repositories/userRepository'
 import { Email } from '../../../domain/models/userModel/email'
 import { Password } from '../../../domain/models/userModel/password'
+import { ILoginUseCase } from '../impluments/auth'
 import { IResponse } from '../index'
 
-export class LoginUseCase {
+export class LoginUseCase implements ILoginUseCase {
   /**
    *
    * @param ur {IUserRepository} - The user repository to be used for data access operations
@@ -56,6 +58,7 @@ export class LoginUseCase {
     const response = {
       accessToken,
       refreshToken,
+      user: pick(existUser, ['id', 'name', 'profilePicture', 'status', 'language', 'timezone']),
     }
 
     return { data: response, status: 200, message: 'ログインできました' }
@@ -69,7 +72,7 @@ export class LoginUseCase {
    *
    * @return {LoginUseCase} - The newly created Builder object.
    */
-  static builder(ur: IUserRepository, se: ISecurityService, je: IJwtTokenExternal): LoginUseCase {
+  static builder(ur: IUserRepository, se: ISecurityService, je: IJwtTokenExternal): ILoginUseCase {
     return new this(ur, se, je)
   }
 }

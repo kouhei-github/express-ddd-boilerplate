@@ -1,4 +1,4 @@
-import { WorkspaceDto } from '../../../infrastructure/datastore/dto/workspace'
+import { WorkspaceDto } from './dto/workspace'
 
 export interface IWorkSpaceRepository {
   create(input: {

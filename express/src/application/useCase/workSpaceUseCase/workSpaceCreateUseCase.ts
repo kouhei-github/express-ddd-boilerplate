@@ -7,9 +7,10 @@ import { PlanEndDate } from '../../../domain/models/workSpaceModel/planEndDate'
 import { PlanStartDate } from '../../../domain/models/workSpaceModel/planStartDate'
 import { WSType } from '../../../domain/models/workSpaceModel/type'
 import { WorkspaceRequestBody } from '../../../presentation/api/server/controller/workSpaceController/schema'
+import { IWorkSpaceCreateUseCase } from '../impluments/workSpace'
 import { IResponse } from '../index'
 
-export class WorkSpaceCreateUseCase {
+export class WorkSpaceCreateUseCase implements IWorkSpaceCreateUseCase {
   constructor(private readonly wr: IWorkSpaceRepository) {}
 
   public async execute(input: WorkspaceRequestBody): Promise<IResponse> {
@@ -39,7 +40,7 @@ export class WorkSpaceCreateUseCase {
     return { data: newWorkspace, status: 200, message: '新しいワークスペースを作成できました' }
   }
 
-  static builder(wr: IWorkSpaceRepository): WorkSpaceCreateUseCase {
+  static builder(wr: IWorkSpaceRepository): IWorkSpaceCreateUseCase {
     return new this(wr)
   }
 }

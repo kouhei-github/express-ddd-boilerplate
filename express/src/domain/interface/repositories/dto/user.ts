@@ -23,4 +23,8 @@ const showUserDaoSchema = z.object({
 
 type ShowUserDao = z.infer<typeof showUserDaoSchema>
 
-export { ShowUserDao, showUserDaoSchema }
+const meSchema = showUserDaoSchema.omit({ userAuth: true })
+
+type MeDao = z.infer<typeof meSchema>
+
+export { MeDao, meSchema, ShowUserDao, showUserDaoSchema }

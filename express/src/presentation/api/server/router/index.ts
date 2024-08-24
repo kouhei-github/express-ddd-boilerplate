@@ -1,6 +1,11 @@
 import { Router } from 'express'
 import { IJwtMiddleware } from '../middleware/jwtMiddleware'
-import { IAuthController, IHealthCheckController, ITaskController, IWorkSpaceController } from './implument'
+import {
+  IAuthController,
+  IHealthCheckController,
+  ITaskController,
+  IWorkSpaceController,
+} from './implument'
 
 const router = Router()
 
@@ -47,10 +52,15 @@ export class WebHooks implements IWebHooks {
     publicRouter.get('/health', (req, res) => this.health.healthCheck(req, res))
   }
 
-  private setupAuthRoutes(publicRouter: Router): void {
-    publicRouter.post('/login', (req, res) => this.auth.login(req, res))
-    publicRouter.post('/signup', (req, res) => this.auth.signup(req, res))
-    publicRouter.post('/refresh', (req, res) => this.auth.refresh(req, res))
+  private setupAuthRoutes(authRouter: Router): void {
+    authRouter.post('/login', (req, res) => this.auth.login(req, res))
+    authRouter.post('/signup', (req, res) => this.auth.signup(req, res))
+    authRouter.post('/refresh', (req, res) => this.auth.refresh(req, res))
+    authRouter.post(
+      '/me',
+      (req, res, next) => this.jwtMiddleware.jwtCheck(req, res, next),
+      (req, res) => this.auth.me(req, res),
+    )
   }
 
   private setupNormalUserRoutes(userRouter: Router): void {

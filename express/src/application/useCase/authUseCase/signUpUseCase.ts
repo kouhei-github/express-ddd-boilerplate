@@ -3,6 +3,7 @@ import { ISecurityService } from '../../../domain/interface/externals/securityEx
 import { IUserRepository } from '../../../domain/interface/repositories/userRepository'
 import { Email } from '../../../domain/models/userModel/email'
 import { Password } from '../../../domain/models/userModel/password'
+import { ISignUpUseCase } from '../impluments/auth'
 import { IResponse } from '../index'
 
 const responseSchema = z.object({
@@ -11,7 +12,7 @@ const responseSchema = z.object({
   name: z.string().nullable(),
 })
 
-export class SignUpUseCase {
+export class SignUpUseCase implements ISignUpUseCase {
   /**
    * Class constructor for creating an instance of MyClass.
    *
@@ -55,7 +56,7 @@ export class SignUpUseCase {
     return { data: responseSchema.parse(user), status: 201, message: '登録できました' }
   }
 
-  static builder(ur: IUserRepository, se: ISecurityService) {
+  static builder(ur: IUserRepository, se: ISecurityService): ISignUpUseCase {
     return new this(ur, se)
   }
 }

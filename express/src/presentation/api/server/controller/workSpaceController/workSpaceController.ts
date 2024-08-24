@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import { WorkSpaceCreateUseCase } from '../../../../../application/useCase/workSpaceUseCase/workSpaceCreateUseCase'
+import { IWorkSpaceCreateUseCase } from '../../../../../application/useCase/impluments/workSpace'
 import { IWorkSpaceController } from '../../router/implument'
 import { workspaceRequestSchema } from './schema'
 
 export class WorkSpaceController implements IWorkSpaceController {
-  constructor(private readonly workSpaceCreateUseCase: WorkSpaceCreateUseCase) {}
+  constructor(private readonly workSpaceCreateUseCase: IWorkSpaceCreateUseCase) {}
   async create(req: Request, res: Response): Promise<any> {
     try {
       const workspace = workspaceRequestSchema.parse(req.body)
@@ -18,7 +18,7 @@ export class WorkSpaceController implements IWorkSpaceController {
     }
   }
 
-  static builder(workSpaceCreateUseCase: WorkSpaceCreateUseCase): IWorkSpaceController {
+  static builder(workSpaceCreateUseCase: IWorkSpaceCreateUseCase): IWorkSpaceController {
     return new this(workSpaceCreateUseCase)
   }
 }

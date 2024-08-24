@@ -6,6 +6,7 @@ import { TaskCreateUseCase } from '../application/useCase/taskUseCase/taskCreate
 import { TaskGetUseCase } from '../application/useCase/taskUseCase/taskGetUseCase'
 import { TaskListUseCase } from '../application/useCase/taskUseCase/taskListUseCase'
 import { TaskPatchUseCase } from '../application/useCase/taskUseCase/taskPatchUseCase'
+import { GetUserUseCase } from '../application/useCase/userUseCase/getUserById'
 import { WorkSpaceCreateUseCase } from '../application/useCase/workSpaceUseCase/workSpaceCreateUseCase'
 import { TaskRepository } from '../infrastructure/datastore/repositoryImpl/taskRepository'
 import { UserRepository } from '../infrastructure/datastore/repositoryImpl/userRepository'
@@ -36,6 +37,9 @@ export const injection = (db: PrismaClient): IWebHooks => {
   // ユーザー登録（サインアップ）に関するユースケースを初期化
   const signUpUseCase = SignUpUseCase.builder(userRepository, securityExternal)
 
+  // すべてのユーザーを取得するユースケースを初期化
+  const getUserUseCase = GetUserUseCase.builder(userRepository)
+
   // ユーザーのログインに関するユースケースを初期化（JWTトークンの発行を含む）
   const loginUseCase = LoginUseCase.builder(userRepository, securityExternal, jwtExternal)
 
@@ -46,7 +50,7 @@ export const injection = (db: PrismaClient): IWebHooks => {
   const healthCheckHandler = HealthCheckController.builder()
 
   // 認証用のコントローラ
-  const authHandler = AuthController.builder(signUpUseCase, loginUseCase, refreshToken)
+  const authHandler = AuthController.builder(signUpUseCase, loginUseCase, refreshToken, getUserUseCase)
 
   // JWTトークンをチェックするミドルウェア
   const jwtMiddleware = JwtMiddleware.builder(jwtExternal)

@@ -1,4 +1,4 @@
-import { TaskDto } from '../../../infrastructure/datastore/dto/task'
+import { TaskDto } from './dto/task'
 
 export interface ITaskRepository {
   create(input: {

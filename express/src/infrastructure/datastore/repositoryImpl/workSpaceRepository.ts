@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { WorkspaceDto, workspaceSchema } from '../../../domain/interface/repositories/dto/workspace'
 import { IWorkSpaceRepository } from '../../../domain/interface/repositories/workSpaceRepository'
-import { WorkspaceDto, workspaceSchema } from '../dto/workspace'
 
 export class WorkSpaceRepository implements IWorkSpaceRepository {
   constructor(private readonly prisma: PrismaClient) {}

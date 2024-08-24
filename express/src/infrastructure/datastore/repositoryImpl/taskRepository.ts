@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { TaskDto, taskListSchema, taskSchema } from '../../../domain/interface/repositories/dto/task'
 import { ITaskRepository } from '../../../domain/interface/repositories/taskRepository'
-import { TaskDto, taskListSchema, taskSchema } from '../dto/task'
 
 export class TaskRepository implements ITaskRepository {
   constructor(private readonly prisma: PrismaClient) {}

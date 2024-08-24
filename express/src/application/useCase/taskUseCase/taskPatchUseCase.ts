@@ -8,9 +8,10 @@ import { TaskStatus } from '../../../domain/models/taskModel/taskStatus'
 import { Text } from '../../../domain/models/taskModel/text'
 import { Title } from '../../../domain/models/taskModel/title'
 import { TaskRequestBody } from '../../../presentation/api/server/controller/taskController/schema'
+import { ITaskPatchUseCase } from '../impluments/task'
 import { IResponse } from '../index'
 
-export class TaskPatchUseCase {
+export class TaskPatchUseCase implements ITaskPatchUseCase {
   constructor(private readonly tr: ITaskRepository) {}
   public async execute(taskId: number, userId: number, input: TaskRequestBody): Promise<IResponse> {
     try {
@@ -55,7 +56,7 @@ export class TaskPatchUseCase {
       }
     }
   }
-  static builder(task: ITaskRepository): TaskPatchUseCase {
+  static builder(task: ITaskRepository): ITaskPatchUseCase {
     return new this(task)
   }
 }

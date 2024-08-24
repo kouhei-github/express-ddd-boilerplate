@@ -1,7 +1,8 @@
 import { ITaskRepository } from '../../../domain/interface/repositories/taskRepository'
+import { ITaskListUseCase } from '../impluments/task'
 import { IResponse } from '../index'
 
-export class TaskListUseCase {
+export class TaskListUseCase implements ITaskListUseCase {
   constructor(private readonly task: ITaskRepository) {}
   public async execute(userId: number): Promise<IResponse> {
     try {
@@ -16,7 +17,7 @@ export class TaskListUseCase {
       }
     }
   }
-  static builder(task: ITaskRepository): TaskListUseCase {
+  static builder(task: ITaskRepository): ITaskListUseCase {
     return new this(task)
   }
 }
