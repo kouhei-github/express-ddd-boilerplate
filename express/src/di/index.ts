@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { LoginUseCase } from '../application/useCase/authUseCase/loginUseCase'
+import { PasswordResetUseCase } from '../application/useCase/authUseCase/passwordResetUseCase'
+import { PasswordUpdateUseCase } from '../application/useCase/authUseCase/passwordUpdateUseCase'
 import { RefreshTokenUseCase } from '../application/useCase/authUseCase/refreshTokenUseCase'
 import { SignUpUseCase } from '../application/useCase/authUseCase/signUpUseCase'
 import { TaskCreateUseCase } from '../application/useCase/taskUseCase/taskCreateUseCase'
@@ -9,8 +11,10 @@ import { TaskPatchUseCase } from '../application/useCase/taskUseCase/taskPatchUs
 import { GetUserUseCase } from '../application/useCase/userUseCase/getUserById'
 import { WorkSpaceCreateUseCase } from '../application/useCase/workSpaceUseCase/workSpaceCreateUseCase'
 import { TaskRepository } from '../infrastructure/datastore/repositoryImpl/taskRepository'
+import { UserAuthRepository } from '../infrastructure/datastore/repositoryImpl/userAuthRepository'
 import { UserRepository } from '../infrastructure/datastore/repositoryImpl/userRepository'
 import { WorkSpaceRepository } from '../infrastructure/datastore/repositoryImpl/workSpaceRepository'
+import { EmailSendGrid } from '../infrastructure/external/emailExternal/EmailSendGrid'
 import { EnvLibExternal } from '../infrastructure/external/envExternal/envLib'
 import { JwtTokenExternal } from '../infrastructure/external/securityExternal/jwtTokenExternal'
 import { SecurityExternal } from '../infrastructure/external/securityExternal/security'
@@ -49,8 +53,27 @@ export const injection = (db: PrismaClient): IWebHooks => {
   // ヘルスチェック用のコントローラー
   const healthCheckHandler = HealthCheckController.builder()
 
+  // userAuth専用のリポジトリ
+  const userAuthReository = UserAuthRepository.builder(db)
+  // メール送信用
+  const mailer = EmailSendGrid.builder(env)
+  // パスワードリセット
+  const passwordResetUseCase = PasswordResetUseCase.builder(userRepository, userAuthReository, mailer, jwtExternal, env)
+  const passwordUpdateUseCase = PasswordUpdateUseCase.builder(
+    userRepository,
+    userAuthReository,
+    jwtExternal,
+    securityExternal,
+  )
   // 認証用のコントローラ
-  const authHandler = AuthController.builder(signUpUseCase, loginUseCase, refreshToken, getUserUseCase)
+  const authHandler = AuthController.builder(
+    signUpUseCase,
+    loginUseCase,
+    refreshToken,
+    getUserUseCase,
+    passwordResetUseCase,
+    passwordUpdateUseCase,
+  )
 
   // JWTトークンをチェックするミドルウェア
   const jwtMiddleware = JwtMiddleware.builder(jwtExternal)
@@ -68,5 +91,11 @@ export const injection = (db: PrismaClient): IWebHooks => {
   const workspaceCreateUseCase = WorkSpaceCreateUseCase.builder(workspaceRepository)
   const workspaceHandler = WorkSpaceController.builder(workspaceCreateUseCase)
   // ここでWebフックのルーティング設定を行い、IWebHooksインターフェースを返す
-  return WebHooks.builder(jwtMiddleware, healthCheckHandler, authHandler, taskHandler, workspaceHandler)
+  return WebHooks.builder(
+    jwtMiddleware,
+    healthCheckHandler,
+    authHandler,
+    taskHandler,
+    workspaceHandler,
+  )
 }

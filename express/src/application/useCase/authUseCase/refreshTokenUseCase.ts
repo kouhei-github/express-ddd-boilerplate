@@ -8,7 +8,7 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   public async execute(refreshToken: string): Promise<IResponse> {
     const claim = this.je.verifyToken(refreshToken)
     if (claim === null) {
-      return { data: 'アクセストークンが無効です', status: 403, message: 'アクセストークンが無効です' }
+      throw new Error('アクセストークンが無効です')
     }
     // アクセストークンの作成
     const newAccessToken = this.je.createAccessToken(claim.email, claim.userId)
@@ -19,7 +19,7 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     }
-    return { data: response, status: 200, message: 'リフレッシュできました' }
+    return { data: response, status: 200 }
   }
 
   static builder(je: IJwtTokenExternal): IRefreshTokenUseCase {

@@ -35,7 +35,7 @@ export class LoginUseCase implements ILoginUseCase {
 
     const existUser = await this.ur.findUserByEmail(emailVo.getValue())
     if (existUser === null) {
-      return { data: '', status: 400, message: 'メールアドレス or パスワードが正しく無いです' }
+      throw new Error('メールアドレス or パスワードが正しく無いです')
     }
 
     // ハッシュ化する
@@ -43,11 +43,7 @@ export class LoginUseCase implements ILoginUseCase {
 
     // 入力されたパスワードのハッシュ値とDBのハッシュ値が正しいか確認
     if (hashPassword !== existUser.userAuth.passwordHash) {
-      return {
-        data: 'メールアドレス or パスワード',
-        status: 403,
-        message: 'メールアドレス or パスワードが正しくありません',
-      }
+      throw new Error('メールアドレス or パスワードが正しく無いです')
     }
 
     // アクセストークンの作成
@@ -61,7 +57,7 @@ export class LoginUseCase implements ILoginUseCase {
       user: pick(existUser, ['id', 'name', 'profilePicture', 'status', 'language', 'timezone']),
     }
 
-    return { data: response, status: 200, message: 'ログインできました' }
+    return { data: response, status: 200 }
   }
 
   /**

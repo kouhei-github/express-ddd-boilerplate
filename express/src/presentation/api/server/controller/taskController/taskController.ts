@@ -21,12 +21,13 @@ export class TaskController implements ITaskController {
       const task = taskRequestSchema.parse(req.body)
       const claim = jwtClaimSchema.parse(res.locals['user'])
       const result = await this.taskCreate.execute(task, claim.userId)
-      if (result.status > 202) {
-        return res.status(result.status).json(result.message)
-      }
       return res.json(result.data)
-    } catch (e) {
-      return res.status(400).json({ data: `${JSON.stringify(e)}` })
+    } catch (error) {
+      if (error instanceof Error) {
+        // エラーをキャッチ
+        return res.status(400).json({ data: `${error.message}` })
+      }
+      return res.status(400).json({ data: `予期せぬエラーが発生しました` })
     }
   }
 
@@ -38,8 +39,12 @@ export class TaskController implements ITaskController {
       }
       const result = await this.taskGet.execute(Number(req.params['id']), claim.userId)
       return res.json(result.data)
-    } catch (e) {
-      return res.status(400).json({ data: `${JSON.stringify(e)}` })
+    } catch (error) {
+      if (error instanceof Error) {
+        // エラーをキャッチ
+        return res.status(400).json({ data: `${error.message}` })
+      }
+      return res.status(400).json({ data: `予期せぬエラーが発生しました` })
     }
   }
 
@@ -51,12 +56,13 @@ export class TaskController implements ITaskController {
         return res.status(400).json({ message: 'id required' })
       }
       const result = await this.taskPatch.execute(Number(req.params['id']), claim.userId, task)
-      if (result.status > 202) {
-        return res.status(result.status).json(result.message)
-      }
       return res.json(result.data)
-    } catch (e) {
-      return res.status(400).json({ data: `${JSON.stringify(e)}` })
+    } catch (error) {
+      if (error instanceof Error) {
+        // エラーをキャッチ
+        return res.status(400).json({ data: `${error.message}` })
+      }
+      return res.status(400).json({ data: `予期せぬエラーが発生しました` })
     }
   }
 
@@ -64,12 +70,13 @@ export class TaskController implements ITaskController {
     try {
       const claim = jwtClaimSchema.parse(res.locals['user'])
       const result = await this.taskList.execute(claim.userId)
-      if (result.status > 202) {
-        return res.status(result.status).json(result.message)
-      }
       return res.json(result.data)
-    } catch (e) {
-      return res.status(400).json({ data: `${JSON.stringify(e)}` })
+    } catch (error) {
+      if (error instanceof Error) {
+        // エラーをキャッチ
+        return res.status(400).json({ data: `${error.message}` })
+      }
+      return res.status(400).json({ data: `予期せぬエラーが発生しました` })
     }
   }
 

@@ -9,12 +9,13 @@ export class WorkSpaceController implements IWorkSpaceController {
     try {
       const workspace = workspaceRequestSchema.parse(req.body)
       const result = await this.workSpaceCreateUseCase.execute(workspace)
-      if (result.status > 202) {
-        return res.status(result.status).json(result.message)
+      return res.status(200).json(result.data)
+    } catch (error) {
+      if (error instanceof Error) {
+        // エラーをキャッチ
+        return res.status(400).json({ data: `${error.message}` })
       }
-      return res.status(200).json(workspace)
-    } catch (e) {
-      return res.status(400).json({ data: `${JSON.stringify(e)}` })
+      return res.status(400).json({ data: `予期せぬエラーが発生しました` })
     }
   }
 

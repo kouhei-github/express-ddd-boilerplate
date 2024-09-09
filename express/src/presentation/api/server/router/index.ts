@@ -1,11 +1,6 @@
 import { Router } from 'express'
 import { IJwtMiddleware } from '../middleware/jwtMiddleware'
-import {
-  IAuthController,
-  IHealthCheckController,
-  ITaskController,
-  IWorkSpaceController,
-} from './implument'
+import { IAuthController, IHealthCheckController, ITaskController, IWorkSpaceController } from './implument'
 
 const router = Router()
 
@@ -56,6 +51,9 @@ export class WebHooks implements IWebHooks {
     authRouter.post('/login', (req, res) => this.auth.login(req, res))
     authRouter.post('/signup', (req, res) => this.auth.signup(req, res))
     authRouter.post('/refresh', (req, res) => this.auth.refresh(req, res))
+    authRouter.post('/password-reset', (req, res) => this.auth.passwordReset(req, res))
+    authRouter.patch('/:userId/update-password', (req, res) => this.auth.passwordUpdate(req, res))
+
     authRouter.post(
       '/me',
       (req, res, next) => this.jwtMiddleware.jwtCheck(req, res, next),

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Task" ADD COLUMN     "isMyTask" BOOLEAN NOT NULL DEFAULT true,
+ADD COLUMN     "isTimeIncluded" BOOLEAN NOT NULL DEFAULT true,
+ALTER COLUMN "text" DROP NOT NULL;

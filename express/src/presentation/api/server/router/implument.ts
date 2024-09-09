@@ -5,6 +5,8 @@ export interface IAuthController {
   login(req: Request, res: Response): Promise<any>
   refresh(req: Request, res: Response): Promise<any>
   me(req: Request, res: Response): Promise<any>
+  passwordReset(req: Request, res: Response): Promise<void>
+  passwordUpdate(req: Request, res: Response): Promise<any>
 }
 
 export interface IHealthCheckController {
@@ -19,5 +21,9 @@ export interface ITaskController {
 }
 
 export interface IWorkSpaceController {
+  create(req: Request, res: Response): Promise<any>
+}
+
+export interface IRetrievalController {
   create(req: Request, res: Response): Promise<any>
 }

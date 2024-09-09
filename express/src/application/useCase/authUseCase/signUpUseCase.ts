@@ -41,7 +41,7 @@ export class SignUpUseCase implements ISignUpUseCase {
 
     const exist = await this.ur.findUserByEmail(emailVo.getValue())
     if (exist !== null) {
-      return { data: '', status: 400, message: 'すでに存在しています' }
+      throw new Error('すでに存在しているメールアドレスです')
     }
 
     // パスワードのソルト
@@ -53,7 +53,7 @@ export class SignUpUseCase implements ISignUpUseCase {
       salt,
       password: hashPassword,
     })
-    return { data: responseSchema.parse(user), status: 201, message: '登録できました' }
+    return { data: responseSchema.parse(user), status: 201 }
   }
 
   static builder(ur: IUserRepository, se: ISecurityService): ISignUpUseCase {

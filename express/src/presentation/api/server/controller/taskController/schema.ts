@@ -7,9 +7,11 @@ const taskRequestSchema = z.object({
   isDeleted: z.boolean(),
   status: z.number(),
   taskDeadline: z.number(),
-  text: z.string(),
+  text: z.string().optional(),
   title: z.string(),
-  url: z.string().url(), // URLの形式を検証
+  url: z.string().url().optional(), // URLの形式を検証
+  isMyTask: z.boolean(),
+  isTimeIncluded: z.boolean(),
 })
 
 type TaskRequestBody = z.infer<typeof taskRequestSchema>

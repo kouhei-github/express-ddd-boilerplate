@@ -2,19 +2,22 @@ import { PrismaClient } from '@prisma/client'
 import { TaskDto, taskListSchema, taskSchema } from '../../../domain/interface/repositories/dto/task'
 import { ITaskRepository } from '../../../domain/interface/repositories/taskRepository'
 
+// Prismaが生成したTaskCreateInputの型を拡張
 export class TaskRepository implements ITaskRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
   async create(input: {
     title: string
-    text: string
-    url: string
+    text: string | null
+    url: string | null
     taskDeadline: number
     status: number
     isDeleted: boolean
     isBookMark: number
     deadline: Date
     creatorUserId: number
+    isMyTask: boolean
+    isTimeIncluded: boolean
   }): Promise<TaskDto> {
     const task = await this.prisma.task.create({
       data: { ...input },
@@ -42,8 +45,8 @@ export class TaskRepository implements ITaskRepository {
   async update(
     input: {
       title: string
-      text: string
-      url: string
+      text: string | null
+      url: string | null
       taskDeadline: number
       status: number
       isDeleted: boolean

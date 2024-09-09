@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "email": "test@test.com",
-  "password": "testj3%Ytv"
+  "password": "%6rdP3paPswo12"
 }
 
 ### POST request to ログイン
@@ -13,13 +13,36 @@ Content-Type: application/json
 
 {
   "email": "test@test.com",
-  "password": "testj3%Ytv"
+  "password": "%6rdP3paPswo12"
 }
+
 ### POST request to refresh
 POST http://0.0.0.0:8080/api/v1/auth/refresh
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzczMSwiZXhwIjoxNzIzOTM3MzMxfQ.Qs7Q5OCSQXmojZCba4uQ0YvFtgOUiRbOxUyomcSkAlQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTcyNTg1MDc1NCwiZXhwIjoxNzI1ODU0MzU0fQ.Pg9byoJg2PdMWfd2JGKxN76koSF8MGZ0dR5N53qUHDM
 
 {
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjIsImlhdCI6MTcyMzkzMzczMSwiZXhwIjoxNzI0NTM4NTMxfQ._jOp0FescQenVnPPQUpwpJI3VFTU_VhUoOJMidwWm-w"
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTcyNTg1MDc1NCwiZXhwIjoxNzI2NDU1NTU0fQ.QBC8B7ut7vbn_Jy8YkL9AC7E4hcs8p05lq1MSvyRibQ"
+}
+
+### POST request to me
+POST http://0.0.0.0:8080/api/v1/auth/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTcyNTg1MDc3MywiZXhwIjoxNzI1ODU0MzczfQ.lk-uF7b4eYjjy6xD_sOdKziA9ZcgGULq38LcUhVv0Rc
+
+### POST request to password reset
+POST http://0.0.0.0:8080/api/v1/auth/password-reset
+Content-Type: application/json
+
+{
+  "email": "test@test.com"
+}
+
+### PATCH request to password update
+PATCH http://0.0.0.0:8080/api/v1/auth/1/update-password
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtvaGVpMDgwMW5hZ2FtYXRzdUBnbWFpbC5jb20iLCJ1c2VySWQiOjEsImlhdCI6MTcyNTg0OTUyNiwiZXhwIjoxNzI1ODUzMTI2fQ.iyGTQLRMmIxl-0SMzjzvWVMx1PGzTwYE5m4WzKlCMb4",
+  "password": "%6rdP3paPswo12"
 }

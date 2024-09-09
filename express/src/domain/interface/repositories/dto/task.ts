@@ -16,14 +16,16 @@ const userSchema = z.object({
 const taskSchema = z.object({
   id: z.number().optional(), // 自動生成されるため、オプション扱い
   title: z.string(),
-  text: z.string(),
+  text: z.string().nullable(),
   status: z.number(),
   creatorUserId: z.number(),
   isBookMark: z.number(),
   isDeleted: z.boolean(),
   taskDeadline: z.bigint(),
-  url: z.string().url().nullable().optional(), // URLが任意であり、nullも許容
+  url: z.string().url().nullable(), // URLが任意であり、nullも許容
   deadline: z.date(),
+  isTimeIncluded: z.boolean(),
+  isMyTask: z.boolean(),
   createdAt: z.date().optional(), // デフォルトで現在の日時が設定されるため、オプション扱い
   updatedAt: z.date().optional(), // デフォルトで現在の日時が設定されるため、オプション扱い
   creatorUser: userSchema.optional(),

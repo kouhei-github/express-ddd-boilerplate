@@ -26,7 +26,7 @@ export class WorkSpaceCreateUseCase implements IWorkSpaceCreateUseCase {
     // ワークスペース名で検索
     const workspace = await this.wr.findByName(name.getValue())
     if (workspace) {
-      return { data: workspace, status: 400, message: `既にワークスペース名「${input.name}」は存在します` }
+      throw new Error(`既にワークスペース名「${input.name}」は存在します`)
     }
     const newWorkspace = this.wr.create({
       name: name.getValue(),
@@ -37,7 +37,7 @@ export class WorkSpaceCreateUseCase implements IWorkSpaceCreateUseCase {
       planEndDate: planEndDate.getValue(),
       type: planType.getValue(),
     })
-    return { data: newWorkspace, status: 200, message: '新しいワークスペースを作成できました' }
+    return { data: newWorkspace, status: 200 }
   }
 
   static builder(wr: IWorkSpaceRepository): IWorkSpaceCreateUseCase {

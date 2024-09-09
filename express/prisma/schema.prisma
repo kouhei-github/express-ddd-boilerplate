@@ -28,10 +28,11 @@ model User {
 }
 
 model UserAuth {
-  id           Int    @id @default(autoincrement())
-  passwordHash String
-  passwordSalt String
-  user         User?
+  id                 Int     @id @default(autoincrement())
+  passwordHash       String
+  passwordSalt       String
+  passwordResetToken String?
+  user               User?
 }
 
 model Workspace {
@@ -66,20 +67,22 @@ model WorkspaceMember {
 }
 
 model Task {
-  id            Int        @id @default(autoincrement())
-  title         String
-  text          String
-  status        Int
-  creatorUserId Int
-  isBookMark    Int
-  isDeleted     Boolean
-  taskDeadline  BigInt
-  url           String?
-  deadline      DateTime
-  createdAt     DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime   @default(now()) @db.Timestamptz(6)
-  creatorUser   User       @relation("TaskCreator", fields: [creatorUserId], references: [id])
-  users         TaskUser[]
+  id             Int        @id @default(autoincrement())
+  title          String
+  text           String?
+  status         Int
+  creatorUserId  Int
+  isBookMark     Int
+  isDeleted      Boolean
+  taskDeadline   BigInt
+  url            String?
+  deadline       DateTime
+  createdAt      DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime   @default(now()) @db.Timestamptz(6)
+  creatorUser    User       @relation("TaskCreator", fields: [creatorUserId], references: [id])
+  isTimeIncluded Boolean    @default(true)
+  isMyTask       Boolean    @default(true)
+  users          TaskUser[]
 
   // @@index([workspaceId])
   @@index([creatorUserId])

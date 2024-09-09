@@ -4,7 +4,10 @@ const userAuthSchema = z.object({
   id: z.number(),
   passwordHash: z.string(),
   passwordSalt: z.string(),
+  passwordResetToken: z.string().nullable(),
 })
+
+type ShowUserAuthSchema = z.infer<typeof userAuthSchema>
 
 const showUserDaoSchema = z.object({
   id: z.number(),
@@ -27,4 +30,4 @@ const meSchema = showUserDaoSchema.omit({ userAuth: true })
 
 type MeDao = z.infer<typeof meSchema>
 
-export { MeDao, meSchema, ShowUserDao, showUserDaoSchema }
+export { MeDao, meSchema, ShowUserAuthSchema, ShowUserDao, showUserDaoSchema, userAuthSchema }
